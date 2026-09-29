@@ -1,0 +1,88 @@
+<!doctype html><html lang="hu"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CDC Dabas Ingatlaniroda — Demo</title>
+<style>
+:root{--green:#173f32;--gold:#c7a35b;--cream:#f5f3ee;--ink:#17201d;--muted:#66716c}*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:var(--ink);background:var(--cream)}a{text-decoration:none;color:inherit}
+.nav{position:absolute;z-index:5;left:0;right:0;top:0;display:flex;justify-content:space-between;padding:24px 6vw;color:#fff}.logo{font-weight:900;letter-spacing:.08em}.logo span{font-weight:400}.links{display:flex;gap:25px;font-size:14px;font-weight:700}
+.hero{min-height:720px;padding:160px 8vw 80px;color:#fff;background:linear-gradient(90deg,#10271fd9,#10271f35),url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1800&q=85') center/cover;display:flex;align-items:center}.inner{max-width:800px}.eyebrow{color:#ead39b;text-transform:uppercase;letter-spacing:.18em;font-size:13px;font-weight:bold}.hero h1{font-size:clamp(45px,7vw,82px);line-height:.98;margin:18px 0}.hero p{font-size:20px;line-height:1.55;max-width:650px}.search{margin-top:30px;background:#fffffff5;padding:12px;border-radius:18px;display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px}.search select,.search button{padding:15px;border:0;border-radius:11px;font-size:15px}.search button{background:var(--gold);color:#fff;font-weight:bold}
+section{padding:75px 7vw}.head{margin-bottom:28px}.tag{color:#8b6b2d;text-transform:uppercase;letter-spacing:.13em;font-size:12px;font-weight:900}.head h2{font-size:40px;margin:8px 0}.cards,.services{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.card{background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 8px 25px #0001}.photo{height:220px;background-size:cover;background-position:center}.body{padding:20px}.price{font-size:25px;font-weight:900;margin:8px 0}.meta{color:var(--muted);font-size:14px}.dark{background:var(--green);color:#fff}.dark .tag{color:#ead39b}.service{border:1px solid #ffffff30;border-radius:20px;padding:25px}.service b{font-size:20px}.service p{color:#d5e0db;line-height:1.55}.contact{background:#e9e6dd;display:grid;grid-template-columns:1.2fr .8fr;gap:40px}.contact h2{font-size:48px;margin:10px 0}.box{background:#fff;border-radius:22px;padding:28px}.box strong{display:block;color:var(--green);margin-top:10px}.btn{display:inline-block;background:var(--gold);color:#fff;padding:14px 20px;border-radius:12px;font-weight:bold}footer{background:#12251e;color:#d5ddd8;padding:28px 7vw;display:flex;justify-content:space-between}
+@media(max-width:800px){.links{display:none}.hero{min-height:780px}.search,.cards,.services,.contact{grid-template-columns:1fr}.contact h2{font-size:36px}}
+
+.property-card{cursor:pointer;transition:transform .18s,box-shadow .18s}.property-card:hover{transform:translateY(-4px);box-shadow:0 14px 35px #0002}
+.results-info{margin:0 0 18px;color:#66716c;font-size:14px}.empty{padding:35px;text-align:center;background:#fff;border-radius:20px;color:#66716c}
+.modal{position:fixed;inset:0;background:#0008;z-index:100;display:none;align-items:center;justify-content:center;padding:18px}.modal.show{display:flex}
+.modal-box{background:#fff;border-radius:24px;max-width:760px;width:100%;max-height:90vh;overflow:auto;position:relative}.modal-photo{height:300px;background-size:cover;background-position:center}
+.modal-content{padding:26px}.modal-close{position:absolute;right:15px;top:15px;border:0;border-radius:50%;width:42px;height:42px;background:#fff;font-size:20px;cursor:pointer;box-shadow:0 3px 12px #0003}
+.detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0}.detail{background:#f5f3ee;border-radius:14px;padding:13px}.detail b{display:block;color:#173f32;font-size:12px;text-transform:uppercase;margin-bottom:4px}
+.contact-form{display:grid;gap:10px;margin-top:20px}.contact-form input,.contact-form textarea{width:100%;padding:13px;border:1px solid #ddd;border-radius:10px;font:inherit}.contact-form textarea{min-height:100px;resize:vertical}
+@media(max-width:600px){.detail-grid{grid-template-columns:1fr 1fr}.modal-photo{height:220px}}
+</style></head><body>
+<nav class="nav"><div class="logo">CDC <span>DABAS INGATLANNIRODA</span></div><div class="links"><a href="#ingatlanok">Ingatlanok</a><a href="#szolgaltatasok">Szolgáltatások</a><a href="#kapcsolat">Kapcsolat</a></div></nav>
+<header class="hero"><div class="inner"><div class="eyebrow">Dabas és környéke · Ingatlan szakértelem</div><h1>Az otthon, amit jó érzés megtalálni.</h1><p>Eladó és kiadó ingatlanok, személyes odafigyelés és helyi ismeret. Nézz körül, keress otthont, vagy bízd ránk ingatlanod értékesítését.</p>
+<div class="search">
+<select id="deal"><option value="all">Eladó vagy kiadó</option><option value="sale">Eladó</option><option value="rent">Kiadó</option></select>
+<select id="location"><option value="all">Minden település</option><option value="Dabas">Dabas</option><option value="Dabasi környék">Dabas és környéke</option></select>
+<select id="type"><option value="all">Minden típus</option><option value="house">Ház</option><option value="flat">Lakás</option><option value="commercial">Üzleti ingatlan</option></select>
+<button id="searchBtn">Keresés</button></div></div></header>
+<section id="ingatlanok">
+<div class="head"><div class="tag">Kiemelt kínálat</div><h2>Ingatlanok, amikre érdemes ránézni</h2></div>
+<div id="resultsInfo" class="results-info">3 kiemelt ingatlan</div>
+<div id="propertyCards" class="cards"></div>
+</section>
+<section class="dark" id="szolgaltatasok"><div class="tag">Több mint hirdetés</div><h2>Segítünk az első kérdéstől a kulcsátadásig.</h2><div class="services"><div class="service"><b>🏡 Eladás</b><p>Értékbecslés, stratégia, bemutatás és a teljes értékesítési folyamat támogatása.</p></div><div class="service"><b>🔑 Vétel és bérlés</b><p>Ház, lakás, telek vagy üzleti ingatlan keresésének támogatása.</p></div><div class="service"><b>🤝 Személyes ügyintézés</b><p>Helyi ismeret, elérhető kapcsolattartás és érthető ügyintézés.</p></div></div></section>
+<section class="contact" id="kapcsolat"><div><div class="tag">Beszéljünk róla</div><h2>Van egy ingatlanod?<br>Vagy keresed az otthonod?</h2><p>Írj vagy hívj minket, és nézzük meg együtt, hogyan tudunk segíteni.</p><a class="btn" href="tel:+36709777820">📞 Hívás indítása</a></div><div class="box"><strong>CDC Dabas Ingatlaniroda</strong>2370 Dabas, Bartók Béla út 47<strong>Telefon</strong>(29) 361-049 · (70) 977-7820<strong>E-mail</strong>dab​as@cdci.hu<strong>Nyitvatartás</strong>H–P 9:00–18:00 · Szo 9:00–12:00</div></section>
+
+<div id="propertyModal" class="modal" aria-hidden="true">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeProperty()">✕</button>
+    <div id="modalPhoto" class="modal-photo"></div>
+    <div id="modalContent" class="modal-content"></div>
+  </div>
+</div>
+<footer><div>CDC Dabas Ingatlaniroda</div><div>Főoldali demo · 2026</div></footer>
+<script>
+const properties=[
+ {id:1,deal:'sale',location:'Dabas',type:'house',typeName:'Családi ház',price:'135 000 000 Ft',area:'~200 m²',land:'1530 m² telek',rooms:'5 szoba',title:'Tágas családi ház nagy telekkel',img:'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85',desc:'Világos, tágas családi otthon nagy telekkel. A részletes leírás és a pontos műszaki adatok az éles adatbázisból tölthetők majd.'},
+ {id:2,deal:'sale',location:'Dabas',type:'house',typeName:'Családi ház',price:'124 900 000 Ft',area:'215 m²',land:'—',rooms:'többgenerációs',title:'Többgenerációs lehetőség',img:'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85',desc:'Nagy alapterületű ingatlan, amely több generáció együttélésére is alkalmas lehet.'},
+ {id:3,deal:'rent',location:'Dabas',type:'commercial',typeName:'Raktár / üzleti ingatlan',price:'280 000 Ft / hó',area:'325 m²',land:'nagy telekterület',rooms:'üzleti célra',title:'Raktárépület nagy telekterülettel',img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=85',desc:'Üzleti célra használható ingatlan. A pontos bérleti feltételek és műszaki adatok egyeztetés után.'}
+];
+
+function renderProperties(list){
+ const wrap=document.getElementById('propertyCards');
+ document.getElementById('resultsInfo').textContent=list.length+' találat';
+ if(!list.length){wrap.innerHTML='<div class="empty" style="grid-column:1/-1">Nincs a feltételeknek megfelelő ingatlan a demo kínálatában.</div>';return}
+ wrap.innerHTML=list.map(p=>`<article class="card property-card" onclick="openProperty(${p.id})">
+   <div class="photo" style="background-image:url('${p.img}')"></div>
+   <div class="body"><div class="tag">${p.deal==='sale'?'Eladó':'Kiadó'} · ${p.location}</div>
+   <div class="price">${p.price}</div><div class="meta">${p.typeName} · ${p.area} · ${p.land}</div></div></article>`).join('');
+}
+function searchProperties(){
+ const deal=document.getElementById('deal').value, loc=document.getElementById('location').value, type=document.getElementById('type').value;
+ const result=properties.filter(p=>(deal==='all'||p.deal===deal)&&(loc==='all'||p.location===loc)&&(type==='all'||p.type===type));
+ renderProperties(result);
+ document.getElementById('ingatlanok').scrollIntoView({behavior:'smooth'});
+}
+function openProperty(id){
+ const p=properties.find(x=>x.id===id); if(!p)return;
+ document.getElementById('modalPhoto').style.backgroundImage=`url('${p.img}')`;
+ document.getElementById('modalContent').innerHTML=`
+   <div class="tag">${p.deal==='sale'?'Eladó':'Kiadó'} · ${p.location}</div>
+   <h2 style="font-size:34px;margin:8px 0">${p.title}</h2>
+   <div class="price">${p.price}</div>
+   <div class="detail-grid">
+    <div class="detail"><b>Típus</b>${p.typeName}</div><div class="detail"><b>Alapterület</b>${p.area}</div><div class="detail"><b>Telek</b>${p.land}</div><div class="detail"><b>Jellemző</b>${p.rooms}</div>
+   </div>
+   <p style="line-height:1.6;color:#66716c">${p.desc}</p>
+   <a class="btn" href="tel:+36709777820">📞 Érdekel az ingatlan</a>
+   <form class="contact-form" onsubmit="sendInterest(event,'${p.title.replace(/'/g,"\\'")}')">
+    <input required placeholder="Név"><input required type="tel" placeholder="Telefonszám"><textarea required placeholder="Üzenet"></textarea>
+    <button class="btn" type="submit">✉️ Érdeklődés küldése</button>
+   </form>`;
+ document.getElementById('propertyModal').classList.add('show');
+ document.getElementById('propertyModal').setAttribute('aria-hidden','false');
+}
+function closeProperty(){document.getElementById('propertyModal').classList.remove('show');document.getElementById('propertyModal').setAttribute('aria-hidden','true')}
+function sendInterest(e,title){e.preventDefault();alert('Demo: az érdeklődés rögzítve az „'+title+'” ingatlanhoz. Éles oldalon ezt az űrlapot e-mailes vagy CRM-es küldésre kötjük.');e.target.reset()}
+document.getElementById('searchBtn').addEventListener('click',searchProperties);
+document.getElementById('propertyModal').addEventListener('click',e=>{if(e.target.id==='propertyModal')closeProperty()});
+renderProperties(properties);
+</script>
+</body></html>
